@@ -1,0 +1,180 @@
+
+-Goal-
+Given a text document that is potentially relevant to this activity and a list of entity types, identify all entities of those types from the text and all relationships among the identified entities.
+
+-Steps-
+1. Identify all entities. For each identified entity, extract the following information:
+- entity_name: Name of the entity, capitalized
+- entity_type: One of the following types: [company, person, technology, university, investment, ecosystem, sector, product, service, acquisition, platform, trend, innovation, market, competition, collaboration, standard, research, development, startup, culture, economy, device, operating system, cloud computing, artificial intelligence, quantum computing, digital transformation]
+- entity_description: Comprehensive description of the entity's attributes and activities
+Format each entity as ("entity"{tuple_delimiter}<entity_name>{tuple_delimiter}<entity_type>{tuple_delimiter}<entity_description>)
+
+2. From the entities identified in step 1, identify all pairs of (source_entity, target_entity) that are *clearly related* to each other.
+For each pair of related entities, extract the following information:
+- source_entity: name of the source entity, as identified in step 1
+- target_entity: name of the target entity, as identified in step 1
+- relationship_description: explanation as to why you think the source entity and the target entity are related to each other
+- relationship_strength: an integer score between 1 to 10, indicating strength of the relationship between the source entity and target entity
+Format each relationship as ("relationship"{tuple_delimiter}<source_entity>{tuple_delimiter}<target_entity>{tuple_delimiter}<relationship_description>{tuple_delimiter}<relationship_strength>)
+
+3. Return output in The primary language of the provided text is **Chinese (Simplified)**. 
+
+The text discusses topics related to major tech companies (Apple, Google, Microsoft, Amazon), Silicon Valley's innovation ecosystem, and future trends like AI and quantum computing, all written in Chinese characters with some English proper nouns (e.g., "iPhone," "AWS," "Azure") mixed in. as a single list of all the entities and relationships identified in steps 1 and 2. Use **{record_delimiter}** as the list delimiter.
+
+4. If you have to translate into The primary language of the provided text is **Chinese (Simplified)**. 
+
+The text discusses topics related to major tech companies (Apple, Google, Microsoft, Amazon), Silicon Valley's innovation ecosystem, and future trends like AI and quantum computing, all written in Chinese characters with some English proper nouns (e.g., "iPhone," "AWS," "Azure") mixed in., just translate the descriptions, nothing else!
+
+5. When finished, output {completion_delimiter}.
+
+-Examples-
+######################
+
+Example 1:
+
+entity_types: [company, person, technology, university, investment, ecosystem, sector, product, service, acquisition, platform, trend, innovation, market, competition, collaboration, standard, research, development, startup, culture, economy, device, operating system, cloud computing, artificial intelligence, quantum computing, digital transformation]
+text:
+为亚马逊最重要的利润来源之一。此外，亚马逊还通过收购 Whole Foods 和推出 Alexa 智能助手，进一步巩固了其在零售和科技领域的领先地位。
+
+创新生态系统的关键要素
+硅谷之所以能够成为全球科技创新的中心，离不开其独特的生态系统。首先，硅谷拥有斯坦福大学和加州大学伯克利分校等世界顶尖高校，这些学校培养了大量的技术人才。其次，硅谷的风险投资行业非常发达，为初创企业提供了充足的资金支持。此外，硅谷的文化鼓励创新和冒险，许多创业者在这里实现了从零到一的突破。
+
+科技巨头的竞争与合作
+尽管苹果、谷歌、微软和亚马逊在多个领域存在竞争，但它们之间也有广泛的合作。例如，谷歌的搜索服务是苹果 Safari 浏览器的默认搜索引擎，而微软的 Office 软件也支持在苹果和安卓设备上运行。此外，这些公司还共同参与了开源项目和技术标准的制定，推动了整个行业的发展。
+
+未来趋势：人工智能与量子计算
+展望未来，人工智能和量子计算将成为科技行业的下一个风口。谷歌和微软已经在量子计算领域投入了大量资源，并
+------------------------
+output:
+("entity"{tuple_delimiter}亚马逊{tuple_delimiter}company{tuple_delimiter}亚马逊是全球领先的科技和零售公司，通过AWS云服务和Alexa智能助手等产品巩固市场地位)
+{record_delimiter}
+("entity"{tuple_delimiter}Whole Foods{tuple_delimiter}company{tuple_delimiter}Whole Foods是一家高端有机食品零售商，被亚马逊收购以扩展其零售业务)
+{record_delimiter}
+("entity"{tuple_delimiter}Alexa{tuple_delimiter}product{tuple_delimiter}Alexa是亚马逊开发的智能语音助手，广泛应用于智能家居设备)
+{record_delimiter}
+("entity"{tuple_delimiter}硅谷{tuple_delimiter}ecosystem{tuple_delimiter}硅谷是全球科技创新的中心，拥有顶尖高校、风险投资和鼓励创新的文化)
+{record_delimiter}
+("entity"{tuple_delimiter}斯坦福大学{tuple_delimiter}university{tuple_delimiter}斯坦福大学是世界顶尖高校，培养了大量的技术人才，是硅谷创新生态系统的重要组成部分)
+{record_delimiter}
+("entity"{tuple_delimiter}加州大学伯克利分校{tuple_delimiter}university{tuple_delimiter}加州大学伯克利分校是世界顶尖高校，为硅谷提供了大量技术人才)
+{record_delimiter}
+("entity"{tuple_delimiter}风险投资{tuple_delimiter}investment{tuple_delimiter}硅谷的风险投资行业非常发达，为初创企业提供了充足的资金支持)
+{record_delimiter}
+("entity"{tuple_delimiter}苹果{tuple_delimiter}company{tuple_delimiter}苹果是全球领先的科技公司，以iPhone等硬件产品和iOS操作系统闻名)
+{record_delimiter}
+("entity"{tuple_delimiter}谷歌{tuple_delimiter}company{tuple_delimiter}谷歌是全球领先的科技公司，以搜索服务和Android操作系统闻名)
+{record_delimiter}
+("entity"{tuple_delimiter}微软{tuple_delimiter}company{tuple_delimiter}微软是全球领先的科技公司，以Windows操作系统和Office软件闻名)
+{record_delimiter}
+("entity"{tuple_delimiter}Safari{tuple_delimiter}product{tuple_delimiter}Safari是苹果开发的网页浏览器，默认使用谷歌的搜索服务)
+{record_delimiter}
+("entity"{tuple_delimiter}Office{tuple_delimiter}product{tuple_delimiter}Office是微软开发的办公软件套件，支持在苹果和安卓设备上运行)
+{record_delimiter}
+("entity"{tuple_delimiter}开源项目{tuple_delimiter}collaboration{tuple_delimiter}开源项目是科技公司共同参与的技术合作形式，推动了整个行业的发展)
+{record_delimiter}
+("entity"{tuple_delimiter}技术标准{tuple_delimiter}standard{tuple_delimiter}技术标准是科技公司共同制定的行业规范，推动了整个行业的发展)
+{record_delimiter}
+("entity"{tuple_delimiter}人工智能{tuple_delimiter}trend{tuple_delimiter}人工智能是科技行业的下一个风口，谷歌和微软等公司已投入大量资源)
+{record_delimiter}
+("entity"{tuple_delimiter}量子计算{tuple_delimiter}trend{tuple_delimiter}量子计算是科技行业的下一个风口，谷歌和微软等公司已投入大量资源)
+{record_delimiter}
+("relationship"{tuple_delimiter}亚马逊{tuple_delimiter}Whole Foods{tuple_delimiter}亚马逊收购了Whole Foods以扩展其零售业务{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}亚马逊{tuple_delimiter}Alexa{tuple_delimiter}亚马逊开发了Alexa智能语音助手{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}硅谷{tuple_delimiter}斯坦福大学{tuple_delimiter}斯坦福大学是硅谷创新生态系统的重要组成部分{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}硅谷{tuple_delimiter}加州大学伯克利分校{tuple_delimiter}加州大学伯克利分校是硅谷创新生态系统的重要组成部分{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}硅谷{tuple_delimiter}风险投资{tuple_delimiter}硅谷的风险投资行业为初创企业提供了资金支持{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}苹果{tuple_delimiter}谷歌{tuple_delimiter}谷歌的搜索服务是苹果Safari浏览器的默认搜索引擎{tuple_delimiter}6)
+{record_delimiter}
+("relationship"{tuple_delimiter}微软{tuple_delimiter}苹果{tuple_delimiter}微软的Office软件支持在苹果设备上运行{tuple_delimiter}6)
+{record_delimiter}
+("relationship"{tuple_delimiter}微软{tuple_delimiter}谷歌{tuple_delimiter}微软和谷歌共同参与了开源项目和技术标准的制定{tuple_delimiter}5)
+{record_delimiter}
+("relationship"{tuple_delimiter}谷歌{tuple_delimiter}量子计算{tuple_delimiter}谷歌在量子计算领域投入了大量资源{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}微软{tuple_delimiter}量子计算{tuple_delimiter}微软在量子计算领域投入了大量资源{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}谷歌{tuple_delimiter}人工智能{tuple_delimiter}谷歌在人工智能领域投入了大量资源{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}微软{tuple_delimiter}人工智能{tuple_delimiter}微软在人工智能领域投入了大量资源{tuple_delimiter}8)
+{completion_delimiter}
+#############################
+
+
+Example 2:
+
+entity_types: [company, person, technology, university, investment, ecosystem, sector, product, service, acquisition, platform, trend, innovation, market, competition, collaboration, standard, research, development, startup, culture, economy, device, operating system, cloud computing, artificial intelligence, quantum computing, digital transformation]
+text:
+艾伦（Paul Allen）于 1975 年在美国华盛顿州雷德蒙德创立。微软最初以开发 BASIC 解释器起家，但真正使其成名的是 1981 年发布的 MS-DOS 操作系统。1985 年，微软推出了 Windows 操作系统，成为个人电脑领域的霸主。
+
+进入 21 世纪后，微软逐渐将业务重心转向云计算。2008 年，微软推出了 Azure 云服务平台，如今已成为全球第二大云计算服务提供商。此外，微软还通过收购 LinkedIn 和 GitHub 等平台，进一步扩展了其在企业服务和开发者社区中的影响力。
+
+亚马逊：从在线书店到全球电商巨头
+亚马逊（Amazon）由杰夫·贝索斯（Jeff Bezos）于 1994 年在美国华盛顿州西雅图创立。最初，亚马逊是一家在线书店，但很快扩展为销售各类商品的电商平台。1997 年，亚马逊在纳斯达克上市，开启了其快速扩张的历程。
+
+2006 年，亚马逊推出了 AWS（Amazon Web Services），这是全球首个大规模商用的云计算平台。如今，AWS 已成为亚马逊最重要的利润来源之一。此外，亚马逊还通过收购 Whole Foods 和推出 Alexa 智能助手，进一步巩固了其在零售和科技领域的领先地位。
+
+创新生态系统的关键要素
+硅谷之所以能够成为全球科
+------------------------
+output:
+("entity"{tuple_delimiter}MICROSOFT{tuple_delimiter}company{tuple_delimiter}微软是一家由保罗·艾伦于1975年在美国华盛顿州雷德蒙德创立的科技公司，最初以开发BASIC解释器起家，后因MS-DOS和Windows操作系统成为个人电脑领域的霸主。)
+{record_delimiter}
+("entity"{tuple_delimiter}PAUL ALLEN{tuple_delimiter}person{tuple_delimiter}保罗·艾伦是微软的联合创始人，于1975年创立了微软公司。)
+{record_delimiter}
+("entity"{tuple_delimiter}MS-DOS{tuple_delimiter}operating system{tuple_delimiter}MS-DOS是微软于1981年发布的操作系统，为微软早期成功奠定了基础。)
+{record_delimiter}
+("entity"{tuple_delimiter}WINDOWS{tuple_delimiter}operating system{tuple_delimiter}Windows是微软于1985年推出的操作系统，成为个人电脑领域的主导平台。)
+{record_delimiter}
+("entity"{tuple_delimiter}AZURE{tuple_delimiter}cloud computing{tuple_delimiter}Azure是微软于2008年推出的云服务平台，现为全球第二大云计算服务提供商。)
+{record_delimiter}
+("entity"{tuple_delimiter}LINKEDIN{tuple_delimiter}platform{tuple_delimiter}LinkedIn是微软收购的职业社交平台，扩展了其在企业服务领域的影响力。)
+{record_delimiter}
+("entity"{tuple_delimiter}GITHUB{tuple_delimiter}platform{tuple_delimiter}GitHub是微软收购的开发者社区平台，增强了其在开发者生态系统中的存在。)
+{record_delimiter}
+("entity"{tuple_delimiter}AMAZON{tuple_delimiter}company{tuple_delimiter}亚马逊是由杰夫·贝索斯于1994年在美国华盛顿州西雅图创立的公司，最初为在线书店，后发展为全球电商巨头。)
+{record_delimiter}
+("entity"{tuple_delimiter}JEFF BEZOS{tuple_delimiter}person{tuple_delimiter}杰夫·贝索斯是亚马逊的创始人，于1994年创立了该公司。)
+{record_delimiter}
+("entity"{tuple_delimiter}AWS{tuple_delimiter}cloud computing{tuple_delimiter}AWS（Amazon Web Services）是亚马逊于2006年推出的全球首个大规模商用云计算平台，现为亚马逊重要利润来源。)
+{record_delimiter}
+("entity"{tuple_delimiter}WHOLE FOODS{tuple_delimiter}acquisition{tuple_delimiter}Whole Foods是亚马逊收购的有机食品超市，巩固了其在零售领域的地位。)
+{record_delimiter}
+("entity"{tuple_delimiter}ALEXA{tuple_delimiter}artificial intelligence{tuple_delimiter}Alexa是亚马逊推出的智能助手，增强了其在科技领域的竞争力。)
+{record_delimiter}
+("relationship"{tuple_delimiter}PAUL ALLEN{tuple_delimiter}MICROSOFT{tuple_delimiter}保罗·艾伦是微软的联合创始人{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}MS-DOS{tuple_delimiter}微软开发并发布了MS-DOS操作系统{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}WINDOWS{tuple_delimiter}微软开发并推出了Windows操作系统{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}AZURE{tuple_delimiter}微软推出了Azure云服务平台{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}LINKEDIN{tuple_delimiter}微软收购了LinkedIn平台{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}GITHUB{tuple_delimiter}微软收购了GitHub平台{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}JEFF BEZOS{tuple_delimiter}AMAZON{tuple_delimiter}杰夫·贝索斯是亚马逊的创始人{tuple_delimiter}10)
+{record_delimiter}
+("relationship"{tuple_delimiter}AMAZON{tuple_delimiter}AWS{tuple_delimiter}亚马逊开发并推出了AWS云计算平台{tuple_delimiter}9)
+{record_delimiter}
+("relationship"{tuple_delimiter}AMAZON{tuple_delimiter}WHOLE FOODS{tuple_delimiter}亚马逊收购了Whole Foods{tuple_delimiter}7)
+{record_delimiter}
+("relationship"{tuple_delimiter}AMAZON{tuple_delimiter}ALEXA{tuple_delimiter}亚马逊开发并推出了Alexa智能助手{tuple_delimiter}8)
+{record_delimiter}
+("relationship"{tuple_delimiter}MICROSOFT{tuple_delimiter}AMAZON{tuple_delimiter}微软和亚马逊在云计算领域存在竞争关系{tuple_delimiter}6)
+{completion_delimiter}
+#############################
+
+
+
+-Real Data-
+######################
+entity_types: [company, person, technology, university, investment, ecosystem, sector, product, service, acquisition, platform, trend, innovation, market, competition, collaboration, standard, research, development, startup, culture, economy, device, operating system, cloud computing, artificial intelligence, quantum computing, digital transformation]
+text: {input_text}
+######################
+output:
