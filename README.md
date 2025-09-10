@@ -88,8 +88,13 @@ pip install -r requirements.txt
 
 4. **配置环境变量**
 ```bash
+# 复制环境配置文件
 cp llm_backend/.env.example llm_backend/.env
-# 编辑 .env 文件，配置API密钥和数据库连接
+
+# 编辑配置文件，填入以下必要信息：
+# - DEEPSEEK_API_KEY: DeepSeek API密钥
+# - SERPAPI_KEY: 搜索API密钥  
+# - 数据库连接信息（MySQL/Neo4j/Redis）
 ```
 
 5. **初始化数据库**
@@ -104,7 +109,7 @@ cd llm_backend
 python run.py
 ```
 
-服务将在 `http://localhost:8000` 启动
+🎉 服务将在 `http://localhost:8000` 启动
 
 ## ⚙️ 配置说明
 
@@ -162,33 +167,62 @@ REDIS_PORT=6379
 
 ## 🧪 测试
 
+### 性能测试
 ```bash
-# 运行性能测试
+# Ollama模型基准测试
 cd llm_backend/app/test
 python ollama_benchmark.py
 
-# 运行单元测试
-pytest tests/
+# FastAPI接口测试
+python test_fastapi.py
+```
+
+### 功能测试
+```bash
+# DeepSeek API测试
+python deepseek_sync.py      # 同步调用测试
+python deepseek_stream.py    # 流式调用测试
+
+# 运行单元测试（如果存在）
+pytest tests/ -v
 ```
 
 ## 📁 项目结构
 
 ```
 deepseek_agent/
-├── llm_backend/              # 后端服务
-│   ├── app/                  # 应用核心
-│   │   ├── services/         # 服务层
-│   │   ├── models/           # 数据模型
-│   │   ├── api/              # API端点
-│   │   └── graphrag/         # GraphRAG集成
-│   ├── lg_agent/             # LangGraph智能体
-│   ├── main.py               # FastAPI应用
-│   └── run.py                # 启动脚本
-├── scripts/                  # 工具脚本
-├── uploads/                  # 文件上传目录
-├── requirements.txt          # 依赖包
-└── README.md                 # 项目文档
+├── 📁 llm_backend/                    # 🔧 后端服务核心
+│   ├── 📁 app/                        # 🏗️ 应用核心模块
+│   │   ├── 📁 api/                    # 🌐 API路由层
+│   │   ├── 📁 core/                   # ⚙️ 核心配置与中间件
+│   │   ├── 📁 graphrag/               # 📊 GraphRAG集成
+│   │   ├── 📁 lg_agent/               # 🤖 LangGraph智能体
+│   │   ├── 📁 models/                 # 🗄️ 数据模型
+│   │   ├── 📁 prompts/                # 💬 提示词模板
+│   │   ├── 📁 services/               # 🔧 业务服务层
+│   │   ├── 📁 test/                   # 🧪 测试文件
+│   │   └── 📁 tools/                  # 🛠️ 工具模块
+│   ├── 📄 main.py                     # 🚀 FastAPI应用入口
+│   ├── 📄 run.py                      # ▶️ 服务启动脚本
+│   └── 📄 README.md                   # 📖 后端详细文档
+├── 📁 scripts/                        # 📜 工具脚本
+│   └── 📄 init_db.py                  # 🗃️ 数据库初始化
+├── 📁 uploads/                        # 📤 文件上传存储
+├── 📄 requirements.txt                # 📦 Python依赖包
+├── 📄 CLAUDE.md                       # 🤖 Claude代码助手配置
+├── 📄 CHANGELOG.md                    # 📝 版本变更日志
+└── 📄 README.md                       # 📚 项目主文档
 ```
+
+### 🏗️ 核心模块说明
+
+| 模块路径 | 功能描述 | 主要文件 |
+|----------|----------|----------|
+| `app/services/` | 业务逻辑服务层 | `llm_factory.py`, `deepseek_service.py`, `ollama_service.py` |
+| `app/lg_agent/` | LangGraph智能体系统 | `main.py`, `lg_states.py`, `kg_sub_graph/` |
+| `app/graphrag/` | 微软GraphRAG集成 | `graphrag/`, `dev/`, `origin_data/` |
+| `app/api/` | RESTful API接口 | `auth.py` (可扩展更多路由) |
+| `app/core/` | 核心配置与工具 | `config.py`, `database.py`, `logger.py` |
 
 ## 🤝 贡献
 
@@ -215,7 +249,4 @@ deepseek_agent/
 <div align="center">
 
 **⭐ 如果此项目对您有帮助，请给我们一个星标！**
-
-Made with ❤️ by AssistGen Team
-
 </div> 
