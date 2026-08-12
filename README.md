@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.8+-blue?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)
 ![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-green)
 ![DeepSeek](https://img.shields.io/badge/DeepSeek-V3-orange)
@@ -61,7 +61,7 @@ graph TB
 
 ### 环境要求
 
-- Python 3.8+
+- Python 3.11+（<3.13）
 - Neo4j 4.0+
 - Redis 6.0+
 - MySQL 8.0+
@@ -71,25 +71,25 @@ graph TB
 1. **克隆项目**
 ```bash
 git clone <repository-url>
-cd deepseek_agent
+cd assist-agent
 ```
 
 2. **创建虚拟环境**
 ```bash
-python -m venv .venv
+uv venv
 source .venv/bin/activate  # Linux/Mac
 # .venv\Scripts\activate   # Windows
 ```
 
-3. **安装依赖**
+3. **安装依赖**（uv 管理）
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 4. **配置环境变量**
 ```bash
 # 复制环境配置文件
-cp llm_backend/.env.example llm_backend/.env
+cp .env.example llm_backend/.env
 
 # 编辑配置文件，填入以下必要信息：
 # - DEEPSEEK_API_KEY: DeepSeek API密钥
@@ -99,7 +99,7 @@ cp llm_backend/.env.example llm_backend/.env
 
 5. **初始化数据库**
 ```bash
-cd scripts
+cd llm_backend/scripts
 python init_db.py
 ```
 
@@ -190,7 +190,7 @@ pytest tests/ -v
 ## 📁 项目结构
 
 ```
-deepseek_agent/
+assist-agent/
 ├── 📁 llm_backend/                    # 🔧 后端服务核心
 │   ├── 📁 app/                        # 🏗️ 应用核心模块
 │   │   ├── 📁 api/                    # 🌐 API路由层
@@ -204,13 +204,15 @@ deepseek_agent/
 │   │   └── 📁 tools/                  # 🛠️ 工具模块
 │   ├── 📄 main.py                     # 🚀 FastAPI应用入口
 │   ├── 📄 run.py                      # ▶️ 服务启动脚本
+│   ├── 📁 scripts/                    # 📜 工具脚本
+│   │   └── 📄 init_db.py              # 🗃️ 数据库初始化
+│   ├── 📁 static/                     # 🎨 静态资源
+│   ├── 📁 uploads/                    # 📤 文件上传存储
 │   └── 📄 README.md                   # 📖 后端详细文档
-├── 📁 scripts/                        # 📜 工具脚本
-│   └── 📄 init_db.py                  # 🗃️ 数据库初始化
-├── 📁 uploads/                        # 📤 文件上传存储
-├── 📄 requirements.txt                # 📦 Python依赖包
-├── 📄 CLAUDE.md                       # 🤖 Claude代码助手配置
-├── 📄 CHANGELOG.md                    # 📝 版本变更日志
+├── 📄 pyproject.toml                  # 📦 uv 项目依赖配置
+├── 📄 uv.lock                         # 🔒 uv 锁定依赖版本
+├── 📄 .env.example                    # 🔑 环境变量示例
+├── 📄 AGENTS.md                       # 🤖 项目知识库
 └── 📄 README.md                       # 📚 项目主文档
 ```
 

@@ -4,32 +4,38 @@
 **Branch:** (current)
 
 ## OVERVIEW
-AssistGen 智能客服系统 - 基于 FastAPI + LangGraph + GraphRAG + Neo4j 的多智能体客服后端服务。核心语言: Python (>=3.10,<3.13)。
+AssistGen 智能客服系统 - 基于 FastAPI + LangGraph + GraphRAG + Neo4j 的多智能体客服后端服务。核心语言: Python (>=3.11,<3.13)。
 
 ## STRUCTURE
 ```
 assist-agent/
-├── llm_backend/                 # 后端服务根目录
+├── .venv/                        # uv 虚拟环境 (已 gitignore)
+├── llm_backend/                  # 后端服务根目录
 │   ├── app/
-│   │   ├── api/                 # REST API 路由
-│   │   ├── core/                # 核心配置 (config, database, logger, security, middleware)
-│   │   ├── services/            # 业务服务层 (LLM工厂、搜索、会话、索引)
-│   │   ├── lg_agent/            # LangGraph 多智能体系统
-│   │   │   ├── kg_sub_graph/    # 知识图谱子图 (Neo4j 工具、Agentic RAG)
-│   │   │   ├── lg_builder.py    # Agent 图构建 (520行)
-│   │   │   ├── lg_states.py     # 状态定义
-│   │   │   └── lg_prompts.py    # 提示词模板
-│   │   ├── graphrag/            # 微软 GraphRAG 集成 (子包独立 Poetry 管理)
-│   │   ├── models/              # SQLAlchemy 数据模型
-│   │   ├── prompts/             # 提示词模板
-│   │   ├── schemas/             # Pydantic 请求/响应模型
-│   │   ├── test/                # 测试脚本 (benchmark, 性能测试)
-│   │   └── tools/               # 工具模块
-│   ├── main.py                  # FastAPI 入口
-│   └── run.py                  # 服务启动脚本
-├── scripts/                    # 工具脚本 (init_db.py)
-├── uploads/                    # 文件上传存储
-├── requirements.txt            # 根目录依赖
+│   │   ├── api/                  # REST API 路由
+│   │   ├── core/                 # 核心配置 (config, database, logger, security, middleware)
+│   │   ├── services/             # 业务服务层 (LLM工厂、搜索、会话、索引)
+│   │   ├── lg_agent/             # LangGraph 多智能体系统
+│   │   │   ├── kg_sub_graph/     # 知识图谱子图 (Neo4j 工具、Agentic RAG)
+│   │   │   ├── lg_builder.py     # Agent 图构建 (520行)
+│   │   │   ├── lg_states.py      # 状态定义
+│   │   │   └── lg_prompts.py     # 提示词模板
+│   │   ├── graphrag/             # 微软 GraphRAG 集成 (子包独立 Poetry 管理)
+│   │   ├── models/               # SQLAlchemy 数据模型
+│   │   ├── prompts/              # 提示词模板
+│   │   ├── schemas/              # Pydantic 请求/响应模型
+│   │   ├── test/                 # 测试脚本 (benchmark, 性能测试)
+│   │   └── tools/                # 工具模块
+│   ├── main.py                   # FastAPI 入口
+│   ├── run.py                    # 服务启动脚本
+│   ├── scripts/                  # 工具脚本 (init_db.py)
+│   ├── static/                   # 静态资源
+│   └── uploads/                  # 文件上传存储
+├── pyproject.toml                # uv 项目依赖配置
+├── uv.lock                       # uv 锁定依赖版本
+├── .env.example                  # 环境变量示例
+├── .gitignore
+├── AGENTS.md                     # 项目知识库
 └── README.md
 ```
 
@@ -45,8 +51,8 @@ assist-agent/
 | 配置管理 | `llm_backend/app/core/config.py` | 环境变量统一入口 |
 
 ## CONVENTIONS
-- **依赖管理**: 根目录用 `requirements.txt`，GraphRAG 子包用 Poetry (pyproject.toml)
-- **代码风格**: GraphRAG 使用 Ruff + Pyright，规则见 `pyproject.toml` (target-version: py310, numpy docstyle)
+- **依赖管理**: 根目录用 uv（`pyproject.toml` + `uv.lock`），GraphRAG 子包用 Poetry (pyproject.toml)
+- **代码风格**: GraphRAG 使用 Ruff + Pyright，规则见 GraphRAG 子包 `pyproject.toml` (target-version: py310, numpy docstyle)
 - **测试**: GraphRAG 子包用 PyTest + unittest 混合风格，conftest 定义 `--run_slow` 选项
 - **API 路由**: 统一挂载到 `/api` 前缀 via `api_router`
 - **状态管理**: LangGraph + MemorySaver 持久化对话状态
@@ -54,8 +60,7 @@ assist-agent/
 
 ## ANTI-PATTERNS (THIS PROJECT)
 - 禁止在注释中使用 DO NOT/NEVER/ALWAYS/DEPRECATED 等绝对化表达 (30+ 文件存在此类注释)
-- GraphRAG 子包的 pyproject.toml 不在根目录，导致依赖管理割裂
-- 根 README 描述的目录结构 (deepseek_agent) 与实际结构 (assist-agent) 不一致
+- 根目录 (uv) 与 GraphRAG 子包 (Poetry) 两套依赖管理并存，导致依赖管理割裂
 
 ## UNIQUE STYLES
 - **多模型动态切换**: 通过 `ServiceType` Enum 和 `settings.CHAT/REASON/AGENT_SERVICE` 动态选择 LLM
@@ -65,6 +70,9 @@ assist-agent/
 
 ## COMMANDS
 ```bash
+# 同步依赖 (uv)
+uv sync
+
 # 启动服务
 cd llm_backend && python run.py
 
@@ -79,7 +87,7 @@ cd llm_backend/app/graphrag && ruff check .
 ```
 
 ## NOTES
-- 环境变量配置: `llm_backend/.env` (参考 `.env.example`)
+- 环境变量配置: `llm_backend/.env` (参考根目录 `.env.example`)
 - GraphRAG 子包需要独立初始化: `python -m graphrag init --root .`
 - Neo4j 连接默认 `bolt://localhost:7687`，需确保图数据库运行
 - LangGraph 断点处理: 检查 `state.interrupts` 并返回中断标识
