@@ -26,11 +26,20 @@ assist-agent/
 │   │   ├── schemas/              # Pydantic 请求/响应模型
 │   │   ├── test/                 # 测试脚本 (benchmark, 性能测试)
 │   │   └── tools/                # 工具模块
-│   ├── main.py                   # FastAPI 入口
+│   ├── main.py                   # FastAPI 入口（挂载前端构建产物到 /）
 │   ├── run.py                    # 服务启动脚本
 │   ├── scripts/                  # 工具脚本 (init_db.py)
-│   ├── static/                   # 静态资源
 │   └── uploads/                  # 文件上传存储
+├── llm_frontend/                 # 前端根目录 (Vue 3 + Vite)
+│   ├── src/
+│   │   ├── views/                # 页面 (Home/Login/Register)
+│   │   ├── services/             # API 服务层 (axios + SSE 流式)
+│   │   ├── stores/               # Pinia 状态 (user/conversation)
+│   │   ├── router/               # 路由与登录守卫
+│   │   └── styles/               # 全局样式 (深色主题)
+│   ├── dist/                     # 构建产物（由后端静态挂载）
+│   ├── package.json              # 前端依赖
+│   └── vite.config.js            # Vite 配置 (/api 代理)
 ├── pyproject.toml                # uv 项目依赖配置
 ├── uv.lock                       # uv 锁定依赖版本
 ├── .env.example                  # 环境变量示例
@@ -49,6 +58,9 @@ assist-agent/
 | GraphRAG 索引 | `llm_backend/app/graphrag/graphrag/index/` | 文档索引工作流 |
 | 会话管理 | `llm_backend/app/services/conversation_service.py` | MySQL 持久化 |
 | 配置管理 | `llm_backend/app/core/config.py` | 环境变量统一入口 |
+| 前端页面 | `llm_frontend/src/views/` | Home/Login/Register 页面组件 |
+| 前端 API 对接 | `llm_frontend/src/services/` | axios 封装 + SSE 流式解析 |
+| 前端状态管理 | `llm_frontend/src/stores/` | Pinia user/conversation store |
 
 ## CONVENTIONS
 - **依赖管理**: 根目录用 uv（`pyproject.toml` + `uv.lock`），GraphRAG 子包用 Poetry (pyproject.toml)
@@ -75,6 +87,12 @@ uv sync
 
 # 启动服务
 cd llm_backend && python run.py
+
+# 前端开发 (热更新, /api 代理到 localhost:8000)
+cd llm_frontend && npm install && npm run dev
+
+# 前端构建 (产物输出到 llm_frontend/dist, 由后端挂载)
+cd llm_frontend && npm run build
 
 # GraphRAG 索引
 cd llm_backend/app/graphrag && python -m graphrag index --root .

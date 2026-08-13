@@ -6,7 +6,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
+/dist/
 downloads/
 eggs/
 .eggs/
@@ -26,6 +26,9 @@ wheels/
 env/
 venv/
 ENV/
+
+# Node (前端)
+node_modules/
 
 # IDE
 .idea/

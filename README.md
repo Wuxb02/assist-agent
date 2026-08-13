@@ -74,19 +74,19 @@ git clone <repository-url>
 cd assist-agent
 ```
 
-2. **创建虚拟环境**
+1. **创建虚拟环境**
 ```bash
 uv venv
 source .venv/bin/activate  # Linux/Mac
 # .venv\Scripts\activate   # Windows
 ```
 
-3. **安装依赖**（uv 管理）
+1. **安装依赖**（uv 管理）
 ```bash
 uv sync
 ```
 
-4. **配置环境变量**
+1. **配置环境变量**
 ```bash
 # 复制环境配置文件
 cp .env.example llm_backend/.env
@@ -97,19 +97,30 @@ cp .env.example llm_backend/.env
 # - 数据库连接信息（MySQL/Neo4j/Redis）
 ```
 
-5. **初始化数据库**
+1. **初始化数据库**
 ```bash
 cd llm_backend/scripts
 python init_db.py
 ```
 
-6. **启动服务**
+1. **启动服务**
 ```bash
 cd llm_backend
-python run.py
+uv run python run.py
 ```
 
-🎉 服务将在 `http://localhost:8000` 启动
+🎉 服务将在 `http://localhost:8000` 启动，前端构建产物由后端直接挂载（访问首页即打开前端界面）。
+
+1. **前端开发模式**（可选，热更新 + 自动代理 `/api` 到后端）
+
+> 生产环境下无需启动前端：后端已挂载 `llm_frontend/dist` 构建产物。仅在需要修改前端代码时使用：
+
+```bash
+cd llm_frontend
+npm install      # 首次安装依赖
+npm run dev      # 开发模式，默认 http://localhost:5173
+```
+
 
 ## ⚙️ 配置说明
 
@@ -202,13 +213,17 @@ assist-agent/
 │   │   ├── 📁 services/               # 🔧 业务服务层
 │   │   ├── 📁 test/                   # 🧪 测试文件
 │   │   └── 📁 tools/                  # 🛠️ 工具模块
-│   ├── 📄 main.py                     # 🚀 FastAPI应用入口
+│   ├── 📄 main.py                     # 🚀 FastAPI应用入口（挂载前端构建产物）
 │   ├── 📄 run.py                      # ▶️ 服务启动脚本
 │   ├── 📁 scripts/                    # 📜 工具脚本
 │   │   └── 📄 init_db.py              # 🗃️ 数据库初始化
-│   ├── 📁 static/                     # 🎨 静态资源
 │   ├── 📁 uploads/                    # 📤 文件上传存储
 │   └── 📄 README.md                   # 📖 后端详细文档
+├── 📁 llm_frontend/                   # 🎨 前端 (Vue 3 + Vite)
+│   ├── 📁 src/                        # 🧩 前端源码（views/components/services/stores）
+│   ├── 📁 dist/                       # 📦 构建产物（由后端挂载到 /）
+│   ├── 📄 package.json                # 📦 前端依赖配置
+│   └── 📄 vite.config.js              # ⚙️ Vite 构建配置（含 /api 代理）
 ├── 📄 pyproject.toml                  # 📦 uv 项目依赖配置
 ├── 📄 uv.lock                         # 🔒 uv 锁定依赖版本
 ├── 📄 .env.example                    # 🔑 环境变量示例
@@ -229,10 +244,10 @@ assist-agent/
 ## 🤝 贡献
 
 1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
+1. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+1. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+1. 推送到分支 (`git push origin feature/AmazingFeature`)
+1. 打开 Pull Request
 
 ## 📄 许可证
 

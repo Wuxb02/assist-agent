@@ -482,6 +482,6 @@ async def upload_image(
         logger.error(f"Image upload failed for user {user_id}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
-# 最后挂载静态文件，并确保使用绝对路径
-STATIC_DIR = Path(__file__).parent / "static" / "dist"
+# 最后挂载前端静态文件（前端构建产物位于项目根目录 llm_frontend/dist）
+STATIC_DIR = Path(__file__).parent.parent / "llm_frontend" / "dist"
 app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")
